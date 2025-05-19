@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use HasFactory;
 class SolicitudServicioItem extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
-        'solicitud_servicio_id', 'servicio_id', 'cantidad',
-        'precio_unitario', 'opciones_personalizacion', 'notas'
+        'solicitud_servicio_id',
+        'servicio_id',
+        'cantidad',
+        'precio_unitario',
+        'opciones_personalizacion',
+        'notas'
     ];
 
     protected $casts = [

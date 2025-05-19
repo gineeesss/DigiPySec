@@ -23,7 +23,7 @@
 
                     <!-- Botón nueva solicitud -->
                     <div>
-                        <a href="{{ route('solicitudes.create') }}" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <a href="{{ route('admin.solicitudes.create') }}" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             Nueva Solicitud
                         </a>
                     </div>
@@ -84,7 +84,7 @@
                                     </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a href="{{ route('solicitudes.show', $solicitud->id) }}" class="text-blue-600 hover:text-blue-900 mr-3">Ver</a>
+                                <a href="{{ route('admin.solicitudes.show', $solicitud->id) }}" class="text-blue-600 hover:text-blue-900 mr-3">Ver</a>
                                 @if($solicitud->estado == 'pendiente' && auth()->user()->can('edit-solicitudes'))
                                     <a href="#" class="text-indigo-600 hover:text-indigo-900">Editar</a>
                                 @endif

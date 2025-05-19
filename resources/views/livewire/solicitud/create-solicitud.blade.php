@@ -11,7 +11,7 @@
                     <select wire:model="cliente_id" id="cliente_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="">Seleccione un cliente</option>
                         @foreach($clientes as $cliente)
-                            <option value="{{ $cliente->id }}">{{ $cliente->nombre }}</option>
+                            <option value="{{ $cliente->id }}">{{ $cliente->name }}</option>
                         @endforeach
                     </select>
                     @error('cliente_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -85,13 +85,19 @@
                 </div>
 
                 <!-- Botones de acción -->
+                <!-- Botones de acción -->
                 <div class="flex justify-end space-x-3">
-                    <a href="{{ route('solicitudes.index') }}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
-                        Cancelar
-                    </a>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
-                        Guardar Solicitud
-                    </button>
+                    <x-secondary-button href="{{ route('admin.solicitudes.index') }}">
+                        <i class="fas fa-times mr-2"></i> Cancelar
+                    </x-secondary-button>
+
+                    <x-secondary-button wire:click.prevent="agregarServicio" type="button">
+                        <i class="fas fa-plus mr-2"></i> Agregar Servicio
+                    </x-secondary-button>
+
+                    <x-secondary-button type="submit">
+                        <i class="fas fa-save mr-2"></i> Crear Solicitud
+                    </x-secondary-button>
                 </div>
             </form>
         </div>

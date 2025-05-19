@@ -9,8 +9,13 @@ class SolicitudServicio extends Model
 {
 
     protected $fillable = [
-        'cliente_id', 'user_id', 'estado', 'total', 'notas',
-        'fecha_aprobacion', 'fecha_completacion'
+        'cliente_id',
+        'user_id',
+        'estado',
+        'total',
+        'notas',
+        'fecha_aprobacion',
+        'fecha_completacion'
     ];
 
     protected $casts = [
@@ -20,7 +25,7 @@ class SolicitudServicio extends Model
 
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class);
+        return $this->belongsTo(Client::class);
     }
 
     public function usuario()

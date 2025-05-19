@@ -32,7 +32,7 @@
 
                         <!-- Botones -->
                         <div class="flex items-center justify-end gap-4">
-                            <x-secondary-button href="{{ route('clients.index') }}">
+                            <x-secondary-button href="{{ route('admin.clients.index') }}">
                                 <i class="fas fa-times mr-2">Cancelar</i>
                             </x-secondary-button>
                             <x-secondary-button type="submit">

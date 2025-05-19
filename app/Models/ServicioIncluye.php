@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use HasFactory;
 
 class ServicioIncluye extends Model
 {
-    use HasFactory;
 
     protected $fillable = ['servicio_id', 'caracteristica'];
+    public function servicio()
+    {
+        return $this->belongsTo(Servicio::class);
+    }
 }

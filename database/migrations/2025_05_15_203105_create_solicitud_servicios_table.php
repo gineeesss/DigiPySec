@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('solicitud_servicios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cliente_id')->constrained()->onDelete('cascade');
+            $table->foreignId('cliente_id')->constrained('clients')->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
             $table->string('estado')->default('pendiente'); // pendiente, aprobada, en_proceso, completada, cancelada
             $table->decimal('total', 10, 2);
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('solicitu_servicios');
+        Schema::dropIfExists('solicitud_servicios');
     }
 };

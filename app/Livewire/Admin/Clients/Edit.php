@@ -34,7 +34,7 @@ class Edit extends Component
             'phone' => $this->phone
         ]);
 
-        return redirect()->route('clients.index')
+        return redirect()->route('admin.clients.index')
             ->with('success', 'Cliente actualizado correctamente');
     }
 

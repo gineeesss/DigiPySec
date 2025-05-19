@@ -19,9 +19,9 @@ class SolicitudShow extends Component
     public $nuevoEstado;
     public $comentario;
 
-    public function mount($id)
+    public function mount(SolicitudServicio $solicitud)
     {
-        $this->solicitud = SolicitudServicio::with(['cliente', 'usuario', 'items.servicio'])->findOrFail($id);
+        $this->solicitud = $solicitud->load (['cliente', 'usuario', 'items.servicio']);
         $this->nuevoEstado = $this->solicitud->estado;
     }
 

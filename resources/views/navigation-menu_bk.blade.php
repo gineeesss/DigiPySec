@@ -18,74 +18,17 @@
 
                     <!-- Menú para administradores -->
                     @canany(['view clients', 'view services', 'view requests'])
-                        <!-- Clientes Dropdown -->
-                        <div class="hidden sm:flex sm:items-center sm:ms-6 relative">
-                            <x-dropdown align="left" width="48">
-                                <x-slot name="trigger">
-                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:text-gray-700 focus:outline-none transition">
-                                        {{ __('Clientes') }}
-                                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </x-slot>
+                        <x-nav-link href="{{ route('admin.clients.index') }}" :active="request()->routeIs('admin.clients.*')">
+                            {{ __('Clientes') }}
+                        </x-nav-link>
 
-                                <x-slot name="content">
-                                    <x-dropdown-link href="{{ route('admin.clients.index') }}">
-                                        {{ __('Ver clientes') }}
-                                    </x-dropdown-link>
-                                    <x-dropdown-link href="{{ route('admin.clients.create') }}">
-                                        {{ __('Crear cliente') }}
-                                    </x-dropdown-link>
-                                </x-slot>
-                            </x-dropdown>
-                        </div>
+                        <x-nav-link href="{{ route('admin.servicios.index') }}" :active="request()->routeIs('admin.servicios.*')">
+                            {{ __('Servicios') }}
+                        </x-nav-link>
 
-                        <!-- Servicios Dropdown -->
-                        <div class="hidden sm:flex sm:items-center sm:ms-6 relative">
-                            <x-dropdown align="left" width="48">
-                                <x-slot name="trigger">
-                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:text-gray-700 focus:outline-none transition">
-                                        {{ __('Servicios') }}
-                                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </x-slot>
-
-                                <x-slot name="content">
-                                    <x-dropdown-link href="{{ route('admin.servicios.index') }}">
-                                        {{ __('Ver servicios') }}
-                                    </x-dropdown-link>
-                                    <x-dropdown-link href="{{ route('admin.servicios.create') }}">
-                                        {{ __('Crear servicio') }}
-                                    </x-dropdown-link>
-                                </x-slot>
-                            </x-dropdown>
-                        </div>
-
-                        <!-- Solicitudes Dropdown -->
-                        <div class="hidden sm:flex sm:items-center sm:ms-6 relative">
-                            <x-dropdown align="left" width="48">
-                                <x-slot name="trigger">
-                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:text-gray-700 focus:outline-none transition">
-                                        {{ __('Solicitudes') }}
-                                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                </x-slot>
-
-                                <x-slot name="content">
-                                    <x-dropdown-link href="{{ route('admin.solicitudes.index') }}">
-                                        {{ __('Ver solicitudes') }}
-                                    </x-dropdown-link>
-                                    <x-dropdown-link href="{{ route('admin.solicitudes.create') }}">
-                                        {{ __('Crear solicitud') }}
-                                    </x-dropdown-link>
-                                </x-slot>
-                            </x-dropdown>
-                        </div>
+                        <x-nav-link href="{{ route('admin.solicitudes.index') }}" :active="request()->routeIs('admin.solicitudes.*')">
+                            {{ __('Solicitudes') }}
+                        </x-nav-link>
                     @endcanany
 
                     <!-- Menú para todos los usuarios autenticados -->
@@ -99,8 +42,9 @@
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
+            <!-- Resto del código del menú (dropdowns de usuario/equipo) -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                     <div class="ms-3 relative">
                         <x-dropdown align="right" width="60">
@@ -152,7 +96,7 @@
                     </div>
                 @endif
 
-                <!-- User Dropdown -->
+                <!-- Settings Dropdown -->
                 <div class="ms-3 relative">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -229,22 +173,13 @@
                 <x-responsive-nav-link href="{{ route('admin.clients.index') }}" :active="request()->routeIs('admin.clients.*')">
                     {{ __('Clientes') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('admin.clients.create') }}" :active="request()->routeIs('admin.clients.create')">
-                    {{ __('Crear cliente') }}
-                </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ route('admin.servicios.index') }}" :active="request()->routeIs('admin.servicios.*')">
                     {{ __('Servicios') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('admin.servicios.create') }}" :active="request()->routeIs('admin.servicios.create')">
-                    {{ __('Crear servicio') }}
-                </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ route('admin.solicitudes.index') }}" :active="request()->routeIs('admin.solicitudes.*')">
                     {{ __('Solicitudes') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link href="{{ route('admin.solicitudes.create') }}" :active="request()->routeIs('admin.solicitudes.create')">
-                    {{ __('Crear solicitud') }}
                 </x-responsive-nav-link>
             @endcanany
 

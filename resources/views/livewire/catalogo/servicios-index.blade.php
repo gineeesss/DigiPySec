@@ -1,5 +1,9 @@
 <!-- resources/views/livewire/catalogo/servicios-index.blade.php -->
 <div>
+    <x-slot name="header">
+        <h2 class="text-xl font-semibold">Servicios</h2>
+    </x-slot>
+
     <div class="flex overflow-x-auto py-4 space-x-4">
         @foreach($categorias as $categoria)
             <button wire:click="seleccionarCategoria({{ $categoria->id }})"

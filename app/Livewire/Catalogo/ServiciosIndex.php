@@ -20,7 +20,7 @@ class ServiciosIndex extends Component
             ? Servicio::where('categoria_servicio_id', $this->categoriaSeleccionada)->where('activo', true)->get()
             : Servicio::where('activo', true)->get();
 
-        return view('livewire.catalogo.servicios-index', compact('categorias', 'servicios'));
+        return view('livewire.catalogo.servicios-index', compact('categorias', 'servicios'))->layout('layouts.app');
     }
 
     public function seleccionarCategoria($categoriaId)

@@ -27,7 +27,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <p class="text-sm text-gray-500">Nombre</p>
-                        <p class="font-medium">{{ $solicitud->cliente->nombre }}</p>
+                        <p class="font-medium">{{ $solicitud->cliente->name }}</p>
                     </div>
                     <div>
                         <p class="text-sm text-gray-500">Contacto</p>

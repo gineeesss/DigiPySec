@@ -1,5 +1,9 @@
 <!-- resources/views/livewire/admin/servicio-form.blade.php -->
 <div>
+    <x-slot name="header">
+        <h2 class="text-xl font-semibold">Crear Servicio</h2>
+            <p class="text-gray-500 text-sm">Hola</p>
+    </x-slot>
     <div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
             <form wire:submit.prevent="save">

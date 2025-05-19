@@ -3,14 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Client;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 class Servicio extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
-        'categoria_servicio_id', 'nombre', 'slug', 'descripcion_corta',
-        'descripcion_larga', 'precio_base', 'es_personalizable', 'tiempo_estimado', 'activo'
+        'categoria_servicio_id',
+        'nombre',
+        'slug',
+        'descripcion_corta',
+        'descripcion_larga',
+        'precio_base',
+        'es_personalizable',
+        'tiempo_estimado',
+        'activo'
     ];
 
     public function categoria()

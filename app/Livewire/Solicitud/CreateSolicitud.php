@@ -3,9 +3,11 @@
 namespace App\Livewire\Solicitud;
 
 use App\Models\SolicitudServicio;
+use App\Models\Client;
+use App\Models\Servicio;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 
-// app/Http/Livewire/Solicitud/CreateSolicitud.php
 class CreateSolicitud extends Component
 {
     public $cliente_id;
@@ -18,20 +20,25 @@ class CreateSolicitud extends Component
     public $opcionesPersonalizacion = [];
 
     protected $rules = [
-        'cliente_id' => 'required|exists:clientes,id',
+        'cliente_id' => 'required|exists:clients,id',
         'servicios' => 'required|array|min:1',
         'notas' => 'nullable|string|max:1000',
     ];
 
     public function mount()
     {
-        $this->clientes = Cliente::all();
+        $this->clientes = Client::all();
         $this->serviciosDisponibles = Servicio::where('activo', true)->get();
     }
 
     public function agregarServicio()
     {
-        $servicio = Servicio::find($this->servicioSeleccionado);
+        $this->validate([
+            'servicioSeleccionado' => 'required|exists:servicios,id',
+            'cantidad' => 'required|integer|min:1'
+        ]);
+
+        $servicio = Servicio::findOrFail($this->servicioSeleccionado);
 
         $this->servicios[] = [
             'servicio_id' => $servicio->id,
@@ -43,6 +50,9 @@ class CreateSolicitud extends Component
         ];
 
         $this->reset(['servicioSeleccionado', 'cantidad', 'opcionesPersonalizacion']);
+
+        // Emitir evento para actualizar la UI si es necesario
+        $this->dispatch('servicioAgregado');
     }
 
     public function removerServicio($index)
@@ -77,7 +87,7 @@ class CreateSolicitud extends Component
             }
 
             session()->flash('message', 'Solicitud creada exitosamente');
-            return redirect()->route('solicitudes.show', $solicitud->id);
+            return redirect()->route('admin.solicitudes.show', $solicitud->id);
         });
     }
 

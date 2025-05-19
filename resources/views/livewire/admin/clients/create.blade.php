@@ -1,6 +1,6 @@
 <div>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold">Nuevo Cliente</h2>
+        <h2 class="text-xl font-semibold">Crear Cliente</h2>
     </x-slot>
 
     <div class="py-12">
@@ -13,7 +13,7 @@
                         <x-input wire:model="phone" label="Teléfono" placeholder="+34 600 000 000" />
 
                         <div class="flex justify-end space-x-4">
-                            <x-button secondary :href="route('clients.index')">Cancelar</x-button>
+                            <x-button secondary :href="route('admin.clients.index')">Cancelar</x-button>
                             <x-button type="submit">Guardar</x-button>
                         </div>
                     </div>

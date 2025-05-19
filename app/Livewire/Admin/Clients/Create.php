@@ -28,7 +28,7 @@ class Create extends Component
             'user_id' => auth()->id()
         ]);
 
-        return redirect()->route('clients.index')
+        return redirect()->route('admin.clients.index')
             ->with('success', 'Cliente creado correctamente');
     }
 

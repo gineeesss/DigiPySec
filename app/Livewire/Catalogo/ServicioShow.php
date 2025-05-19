@@ -3,6 +3,7 @@
 namespace App\Livewire\Catalogo;
 
 use App\Models\Servicio;
+use App\Models\SolicitudServicio;
 use Livewire\Component;
 
 // app/Http/Livewire/Catalogo/ServicioShow.php

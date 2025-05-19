@@ -1,52 +1,51 @@
 <!-- resources/views/livewire/admin/clients/index.blade.php -->
 <div>
-    <x-action-section>
-        <x-slot name="title">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Listado de Clientes') }}
-            </h2>
-        </x-slot>
+    <x-slot name="header">
+        <h2 class="text-xl font-semibold">Listado de Clientes</h2>
+    </x-slot>
 
-        <x-slot name="description">
-            Gestiona todos los clientes registrados
-        </x-slot>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+                <!-- Descripción -->
+                <p class="mb-4 text-gray-600">Gestiona todos los clientes registrados</p>
 
-        <x-slot name="content">
-            <!-- Barra de búsqueda -->
-            <div class="mb-4">
-                <x-input wire:model="search" type="text" placeholder="Buscar..." class="w-full"/>
-            </div>
+                <!-- Barra de búsqueda -->
+                <div class="mb-4">
+                    <x-input wire:model="search" type="text" placeholder="Buscar..." class="w-full"/>
+                </div>
 
-            <!-- Tabla -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead>
-                    <tr>
-                        <th class="px-6 py-3 bg-gray-50 text-left">Nombre</th>
-                        <th class="px-6 py-3 bg-gray-50 text-left">Email</th>
-                        <th class="px-6 py-3 bg-gray-50 text-left">Responsable</th>
-                        <th class="px-6 py-3 bg-gray-50"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($clients as $client)
+                <!-- Tabla -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
                         <tr>
-                            <td class="px-6 py-4">{{ $client->name }}</td>
-                            <td class="px-6 py-4">{{ $client->email }}</td>
-                            <td class="px-6 py-4">{{ $client->user->name }}</td>
-                            <td class="px-6 py-4 text-right">
-                                <a href="{{ route('clients.edit', $client) }}" class="text-blue-500 hover:text-blue-700">Editar</a>
-                            </td>
+                            <th class="px-6 py-3 text-left text-gray-700 bg-gray-100">Nombre</th>
+                            <th class="px-6 py-3 text-left text-gray-700 bg-gray-100">Email</th>
+                            <th class="px-6 py-3 text-left text-gray-700 bg-gray-100">Responsable</th>
+                            <th class="px-6 py-3 bg-gray-100"></th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                        @foreach($clients as $client)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 text-gray-900">{{ $client->name }}</td>
+                                <td class="px-6 py-4 text-gray-900">{{ $client->email }}</td>
+                                <td class="px-6 py-4 text-gray-900">{{ $client->user->name }}</td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="{{ route('admin.clients.edit', $client) }}" class="text-blue-500 hover:text-blue-700">Editar</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
 
-            <!-- Paginación -->
-            <div class="mt-4">
-                {{ $clients->links() }}
+                <!-- Paginación -->
+                <div class="mt-4">
+                    {{ $clients->links() }}
+                </div>
             </div>
-        </x-slot>
-    </x-action-section>
+        </div>
+    </div>
 </div>
