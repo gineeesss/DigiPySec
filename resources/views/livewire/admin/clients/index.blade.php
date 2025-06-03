@@ -12,7 +12,7 @@
 
                 <!-- Barra de búsqueda -->
                 <div class="mb-4">
-                    <x-input wire:model="search" type="text" placeholder="Buscar..." class="w-full"/>
+                    <x-input wire:model.live.debounce.500ms="search" type="text" placeholder="Buscar por nombre o email..." class="w-full"/>
                 </div>
 
                 <!-- Tabla -->
@@ -29,8 +29,8 @@
                         <tbody>
                         @foreach($clients as $client)
                             <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 text-gray-900">{{ $client->name }}</td>
-                                <td class="px-6 py-4 text-gray-900">{{ $client->email }}</td>
+                                <td class="px-6 py-4 text-gray-900">{{ $client->user->name }}</td>
+                                <td class="px-6 py-4 text-gray-900">{{ $client->user->email }}</td>
                                 <td class="px-6 py-4 text-gray-900">{{ $client->user->name }}</td>
                                 <td class="px-6 py-4 text-right">
                                     <a href="{{ route('admin.clients.edit', $client) }}" class="text-blue-500 hover:text-blue-700">Editar</a>

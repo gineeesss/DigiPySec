@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
-use App\Actions\Jetstream\DeleteUser;
+use App\Events\Actions\Jetstream\DeleteUser;
+use App\Listeners\CreateClientForRegisteredUser;
+use Event;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Jetstream\Jetstream;
 
@@ -24,6 +27,10 @@ class JetstreamServiceProvider extends ServiceProvider
         $this->configurePermissions();
 
         Jetstream::deleteUsersUsing(DeleteUser::class);
+        Event::listen(
+            Registered::class,
+            [CreateClientForRegisteredUser::class, 'handle']
+        );
     }
 
     /**

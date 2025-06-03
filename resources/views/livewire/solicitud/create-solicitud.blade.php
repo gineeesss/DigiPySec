@@ -11,7 +11,7 @@
                     <select wire:model="cliente_id" id="cliente_id" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="">Seleccione un cliente</option>
                         @foreach($clientes as $cliente)
-                            <option value="{{ $cliente->id }}">{{ $cliente->name }}</option>
+                            <option value="{{ $cliente->id }}">{{ $cliente->user->name }}</option>
                         @endforeach
                     </select>
                     @error('cliente_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror

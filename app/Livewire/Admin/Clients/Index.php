@@ -17,12 +17,15 @@ class Index extends Component
     {
         return view('livewire.admin.clients.index', [
             'clients' => Client::with('user')
-                ->where('name', 'like', "%{$this->search}%")
-                ->orWhere('email', 'like', "%{$this->search}%")
+                ->where(function ($query) {
+                    $query->whereHas('user', function ($subquery) {
+                        $subquery->where('name', 'like', "%{$this->search}%")
+                            ->orWhere('email', 'like', "%{$this->search}%");
+                    })->orWhere('company_name', 'like', "%{$this->search}%");
+                })
                 ->paginate($this->perPage)
         ])->layout('layouts.app');
     }
-
     public function delete(Client $client)
     {
         $client->delete();
@@ -30,5 +33,9 @@ class Index extends Component
             'type' => 'success',
             'message' => '¡Cliente eliminado!'
         ]);
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
     }
 }

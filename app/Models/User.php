@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -17,6 +18,7 @@ class User extends Authenticatable
     use HasFactory;
     use HasProfilePhoto;
     use HasRoles;
+    use HasTeams;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -43,5 +45,29 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function client()
+    {
+        return $this->hasOne(Client::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    public function paymentMethods()
+    {
+        return $this->hasMany(PaymentMethod::class);
+    }
+
+    public function defaultAddress()
+    {
+        return $this->hasOne(Address::class)->where('is_default', true);
+    }
+
+    public function defaultPaymentMethod()
+    {
+        return $this->hasOne(PaymentMethod::class)->where('is_default', true);
     }
 }

@@ -6,7 +6,9 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-mark class="block h-9 w-auto" />
+
+                        <x-app-logo class="block h-9 w-auto" />
+
                     </a>
                 </div>
 
@@ -64,6 +66,8 @@
                             </x-dropdown>
                         </div>
 
+                        <!--implementar crud blog-->
+
                         <!-- Solicitudes Dropdown -->
                         <div class="hidden sm:flex sm:items-center sm:ms-6 relative">
                             <x-dropdown align="left" width="48">
@@ -93,9 +97,15 @@
                         {{ __('Catálogo') }}
                     </x-nav-link>
 
+                    <x-nav-link href="{{ route('blog.index') }}" :active="request()->routeIs('blog.index')">
+                        {{ __('Blog') }}
+                    </x-nav-link>
+
                     <x-nav-link href="{{ route('chat') }}" :active="request()->routeIs('chat')">
                         {{ __('Chat') }}
                     </x-nav-link>
+
+
                 </div>
             </div>
 
@@ -152,7 +162,13 @@
                     </div>
                 @endif
 
-                <!-- User Dropdown -->
+                    <!-- Shopping Cart -->
+                    <div class="ms-3 relative">
+                        @livewire('carrito')
+
+                    </div>
+
+                    <!-- User Dropdown -->
                 <div class="ms-3 relative">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -251,6 +267,10 @@
             <!-- Menú responsive para todos los usuarios -->
             <x-responsive-nav-link href="{{ route('servicios.index') }}" :active="request()->routeIs('servicios.index')">
                 {{ __('Catálogo') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link href="{{ route('blog.index') }}" :active="request()->routeIs('blog.index')">
+                {{ __('Blog') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link href="{{ route('chat') }}" :active="request()->routeIs('chat')">

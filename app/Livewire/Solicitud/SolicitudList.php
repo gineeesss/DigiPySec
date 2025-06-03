@@ -4,10 +4,12 @@ namespace App\Livewire\Solicitud;
 
 use App\Models\SolicitudServicio;
 use Livewire\Component;
+use Livewire\WithPagination;
 
-// app/Http/Livewire/Solicitud/SolicitudList.php
 class SolicitudList extends Component
 {
+    use WithPagination;
+
     public $search = '';
     public $estado = '';
     public $sortBy = 'created_at';
@@ -32,6 +34,14 @@ class SolicitudList extends Component
         $this->sortBy = $field;
     }
 
+    public function cambiarEstadoRapido($solicitudId, $nuevoEstado)
+    {
+        $solicitud = SolicitudServicio::findOrFail($solicitudId);
+        $solicitud->update(['estado' => $nuevoEstado]);
+
+        session()->flash('message', 'Estado actualizado correctamente');
+    }
+
     public function render()
     {
         $solicitudes = SolicitudServicio::query()
@@ -39,7 +49,7 @@ class SolicitudList extends Component
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->whereHas('cliente', function ($q) {
-                        $q->where('nombre', 'like', '%'.$this->search.'%')
+                        $q->where('name', 'like', '%'.$this->search.'%')
                             ->orWhere('email', 'like', '%'.$this->search.'%')
                             ->orWhere('telefono', 'like', '%'.$this->search.'%');
                     })

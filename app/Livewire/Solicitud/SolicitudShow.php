@@ -2,10 +2,11 @@
 
 namespace App\Livewire\Solicitud;
 
+use App\Events\SolicitudEstadoActualizado;
 use App\Models\SolicitudServicio;
 use Livewire\Component;
+use Illuminate\Support\Facades\DB;
 
-// app/Http/Livewire/Solicitud/SolicitudShow.php
 class SolicitudShow extends Component
 {
     public $solicitud;
@@ -18,10 +19,11 @@ class SolicitudShow extends Component
     ];
     public $nuevoEstado;
     public $comentario;
+    public $mostrarFormularioEdicion = false;
 
     public function mount(SolicitudServicio $solicitud)
     {
-        $this->solicitud = $solicitud->load (['cliente', 'usuario', 'items.servicio']);
+        $this->solicitud = $solicitud->load(['cliente', 'usuario', 'items.servicio']);
         $this->nuevoEstado = $this->solicitud->estado;
     }
 
@@ -33,15 +35,22 @@ class SolicitudShow extends Component
         ]);
 
         DB::transaction(function () {
-            $this->solicitud->actualizarEstado($this->nuevoEstado);
+            $this->solicitud->update(['estado' => $this->nuevoEstado]);
 
             if ($this->comentario) {
                 $this->solicitud->notas .= "\n\n[" . now()->format('d/m/Y H:i') . "] " . $this->comentario;
                 $this->solicitud->save();
+                event(new SolicitudEstadoActualizado($this->solicitud, $this->comentario));
             }
 
             session()->flash('message', 'Estado actualizado correctamente');
+            $this->dispatch('estadoActualizado');
         });
+    }
+
+    public function toggleEdicion()
+    {
+        $this->mostrarFormularioEdicion = !$this->mostrarFormularioEdicion;
     }
 
     public function render()

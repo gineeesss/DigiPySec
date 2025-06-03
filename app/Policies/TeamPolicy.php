@@ -73,4 +73,9 @@ class TeamPolicy
     {
         return $user->ownsTeam($team);
     }
+
+    public function manage(User $user): bool
+    {
+        return $user->can('manage-blog');
+    }
 }

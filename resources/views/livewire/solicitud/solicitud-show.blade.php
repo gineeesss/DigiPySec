@@ -1,4 +1,3 @@
-<!-- resources/views/livewire/solicitud/solicitud-show.blade.php -->
 <div>
     <div class="max-w-4xl mx-auto py-6 sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -11,14 +10,24 @@
                         por {{ $solicitud->usuario->name ?? 'Usuario no disponible' }}
                     </p>
                 </div>
-                <span class="px-3 py-1 rounded-full text-sm font-medium
-                    @if($solicitud->estado == 'pendiente') bg-yellow-100 text-yellow-800
-                    @elseif($solicitud->estado == 'aprobada') bg-blue-100 text-blue-800
-                    @elseif($solicitud->estado == 'en_proceso') bg-purple-100 text-purple-800
-                    @elseif($solicitud->estado == 'completada') bg-green-100 text-green-800
-                    @else bg-red-100 text-red-800 @endif">
-                    {{ $estadosDisponibles[$solicitud->estado] }}
-                </span>
+                <div class="flex items-center space-x-2">
+                    <span class="px-3 py-1 rounded-full text-sm font-medium
+                        @if($solicitud->estado == 'pendiente') bg-yellow-100 text-yellow-800
+                        @elseif($solicitud->estado == 'aprobada') bg-blue-100 text-blue-800
+                        @elseif($solicitud->estado == 'en_proceso') bg-purple-100 text-purple-800
+                        @elseif($solicitud->estado == 'completada') bg-green-100 text-green-800
+                        @else bg-red-100 text-red-800 @endif">
+                        {{ $estadosDisponibles[$solicitud->estado] }}
+                    </span>
+
+                    @can('manage-servicios')
+                        <button wire:click="toggleEdicion" class="text-indigo-600 hover:text-indigo-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                            </svg>
+                        </button>
+                    @endcan
+                </div>
             </div>
 
             <!-- Información del cliente -->
@@ -83,7 +92,16 @@
                 <h3 class="text-lg font-medium text-gray-800 mb-2">Notas</h3>
                 <div class="bg-gray-50 p-4 rounded-lg mb-4 whitespace-pre-line">{{ $solicitud->notas }}</div>
 
-                @if(in_array(auth()->user()->role, ['admin', 'tecnico']))
+                @if($mostrarFormularioEdicion)
+                    <div class="mt-6 border-t border-gray-200 pt-4">
+                        <h3 class="text-lg font-medium text-gray-800 mb-2">Editar Solicitud</h3>
+                        <a href="{{ route('admin.solicitudes.edit', $solicitud->id) }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            Editar Contenido de la Solicitud
+                        </a>
+                    </div>
+                @endif
+
+                @can('manage-servicios')
                     <div class="mt-6 border-t border-gray-200 pt-4">
                         <h3 class="text-lg font-medium text-gray-800 mb-2">Cambiar Estado</h3>
                         <form wire:submit.prevent="cambiarEstado" class="space-y-4">
@@ -106,7 +124,7 @@
                             </button>
                         </form>
                     </div>
-                @endif
+                @endcan
             </div>
         </div>
     </div>

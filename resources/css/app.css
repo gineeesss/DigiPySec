@@ -5,3 +5,59 @@
 [x-cloak] {
     display: none;
 }
+/* Estilos Trix */
+.trix-button-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.trix-button {
+    background: white;
+    border: none;
+    border-right: 1px solid #ddd;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.trix-button:hover {
+    background: #f5f5f5;
+}
+
+.trix-button--icon {
+    width: auto;
+    height: auto;
+}
+
+.trix-content {
+    min-height: 300px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+    margin-top: 10px;
+}
+
+@import 'trix/dist/trix';
+
+.trix-button-group {
+    @apply flex flex-wrap mb-3 border border-gray-300 rounded overflow-hidden;
+}
+
+.trix-button {
+    @apply bg-white border-none border-r border-gray-300 px-3 py-2 cursor-pointer;
+}
+
+.trix-button:hover {
+    @apply bg-gray-100;
+}
+
+.trix-button--icon {
+    @apply w-auto h-auto;
+}
+
+.trix-content {
+    @apply min-h-[300px] border border-gray-300 rounded p-4 mt-2;
+}
