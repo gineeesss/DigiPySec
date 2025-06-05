@@ -8,13 +8,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Cita extends Model
 {
     protected $fillable = [
-        'cliente_id',
         'peluquero_id',
         'fecha',
         'hora_inicio',
         'hora_fin',
         'estado',
-        'notas'
+        'notas',
+        'nombre_cliente',
+        'email_cliente',
+        'telefono_cliente'
     ];
 
     public function peluquero(): BelongsTo

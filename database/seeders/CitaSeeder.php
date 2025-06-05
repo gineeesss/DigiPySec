@@ -16,7 +16,7 @@ class CitaSeeder extends Seeder
         $tratamientos = Tratamiento::all();
 
         // Citas pasadas
-        foreach (range(1, 10) as $i) {
+        foreach (range(1, 3) as $i) {
             $peluquero = $peluqueros->random();
             $tratamiento = $tratamientos->random();
             $fecha = Carbon::today()->subDays(rand(1, 30));
@@ -28,14 +28,16 @@ class CitaSeeder extends Seeder
                 'hora_fin' => $this->getRandomHora(),
                 'estado' => $this->getRandomEstado(),
                 'notas' => 'Nota de prueba para la cita ' . $i,
-                'cliente_id' => null,
+                'nombre_cliente' => $this->getRandomNombre(),
+                'telefono_cliente' => $this->getRandomTelefono(),
+                'email_cliente' => $this->getRandomEmail(),
             ]);
 
             $cita->tratamientos()->attach($tratamiento->id);
         }
 
         // Citas futuras
-        foreach (range(1, 15) as $i) {
+        foreach (range(1, 3) as $i) {
             $peluquero = $peluqueros->random();
             $tratamiento = $tratamientos->random();
             $fecha = Carbon::today()->addDays(rand(1, 30));
@@ -47,7 +49,9 @@ class CitaSeeder extends Seeder
                 'hora_fin' => Carbon::parse($this->getRandomHora())->addMinutes($tratamiento->duracion),
                 'estado' => 'pendiente',
                 'notas' => 'Nota de prueba para la cita futura ' . $i,
-                'cliente_id' => null,
+                'nombre_cliente' => $this->getRandomNombre(),
+                'telefono_cliente' => $this->getRandomTelefono(),
+                'email_cliente' => $this->getRandomEmail(),
             ]);
 
             $cita->tratamientos()->attach($tratamiento->id);
@@ -63,6 +67,22 @@ class CitaSeeder extends Seeder
     private function getRandomEstado()
     {
         $estados = ['pendiente', 'confirmada', 'completada', 'cancelada'];
+        return $estados[array_rand($estados)];
+    }
+
+    private function getRandomNombre()
+    {
+        $estados = ['Paco', 'Daniel', 'Rosa', 'Mandarina'];
+        return $estados[array_rand($estados)];
+    }
+    private function getRandomEmail()
+    {
+        $estados = ['paco@gmail.com', 'miau@hotmail.com', 'rosamelano@yopmail.com', 'dmorenop01@iescastelar.com'];
+        return $estados[array_rand($estados)];
+    }
+    private function getRandomTelefono()
+    {
+        $estados = ['666 666 666', '679 679 679', '696 969 696', '011235813'];
         return $estados[array_rand($estados)];
     }
 }

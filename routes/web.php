@@ -137,3 +137,15 @@ Route::prefix('barberia')->group(function() {
         Route::get('/', Panel::class)->name('barberia.admin');
     });
 });
+
+// routes/web.php
+use App\Livewire\Demos\Barberia\Admin\Peluqueros;
+use App\Livewire\Demos\Barberia\Admin\Citas;
+use App\Livewire\Demos\Barberia\Admin\Horarios;
+
+Route::prefix('barberia/admin')->group(function() {
+    Route::get('/', Panel::class)->name('barberia.admin');
+    Route::get('/peluqueros', Peluqueros::class)->name('barberia.admin.peluqueros');
+    Route::get('/citas', Citas::class)->name('barberia.admin.citas');
+    Route::get('/horarios', Horarios::class)->name('barberia.admin.horarios');
+});

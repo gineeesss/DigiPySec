@@ -114,14 +114,17 @@ class Reservar extends Component
             'emailCliente' => 'required|email',
         ]);
 
+
         $cita = Cita::create([
             'peluquero_id' => $this->peluqueroSeleccionado,
             'fecha' => $this->fechaSeleccionada,
             'hora_inicio' => $this->horaSeleccionada,
-            'hora_fin' => Carbon::parse($this->horaSeleccionada)->addMinutes(30), // Ajustar según tratamiento
+            'hora_fin' => Carbon::parse($this->horaSeleccionada)->addMinutes($this->tratamientos->find($this->tratamientoSeleccionado)->duracion),
             'estado' => 'pendiente',
             'notas' => $this->notas,
-            'cliente_id' => auth()->id() ?? null, // Si hay autenticación
+            'nombre_cliente' => $this->nombreCliente,
+            'email_cliente' => $this->emailCliente,
+            'telefono_cliente' => $this->telefonoCliente,
         ]);
 
         $cita->tratamientos()->attach($this->tratamientoSeleccionado);

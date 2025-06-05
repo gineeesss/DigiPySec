@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('citas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cliente_id')->nullable()->constrained('users');
             $table->foreignId('peluquero_id')->constrained();
             $table->date('fecha');
             $table->time('hora_inicio');
             $table->time('hora_fin');
-            $table->string('estado')->default('pendiente'); // pendiente, confirmada, completada, cancelada
+            $table->string('estado')->default('pendiente');
             $table->text('notas')->nullable();
+            $table->string('nombre_cliente');
+            $table->string('email_cliente');
+            $table->string('telefono_cliente');
             $table->timestamps();
         });
     }

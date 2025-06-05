@@ -73,6 +73,6 @@ class Peluqueros extends Component
 
     public function render()
     {
-        return view('livewire.demos.barberia.admin.peluqueros');
+        return view('livewire.demos.barberia.admin.peluqueros')->layout('layouts.demo-barberia');
     }
 }

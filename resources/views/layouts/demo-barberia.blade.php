@@ -8,6 +8,28 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+    /* Estilos para el dropdown de acciones */
+    .relative:hover .absolute {
+    display: block;
+    }
+
+    /* Transiciones suaves */
+    .transition-colors {
+    transition: background-color 0.2s ease;
+    }
+
+    /* Mejora la apariencia de las tablas */
+    table {
+    border-collapse: separate;
+    border-spacing: 0;
+    }
+
+    th {
+    position: sticky;
+    top: 0;
+    }
+    </style>
     @livewireStyles
 </head>
 <body class="bg-gray-100">
@@ -38,3 +60,4 @@
 @livewireScripts
 </body>
 </html>
+
