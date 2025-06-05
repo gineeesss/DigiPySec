@@ -26,6 +26,17 @@ class DatabaseSeeder extends Seeder
             CategoriaServicioSeeder::class,
             ServicioSeeder::class,
             PostSeeder::class,
+
+            //seeders para paginas demo
+            CategoriaPlatoSeeder::class,
+            PlatoSeeder::class,
+
+            //seeders para barberia
+            PeluqueroSeeder::class,
+            TratamientoSeeder::class,
+            HorarioDisponibleSeeder::class,
+            CitaSeeder::class,
+
         ]);
 
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Button;
+namespace App\View\View\Components\Button;
 
 use Closure;
 use Illuminate\Contracts\View\View;

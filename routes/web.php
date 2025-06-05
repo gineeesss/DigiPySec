@@ -9,6 +9,7 @@ use App\Livewire\Admin\Servicio\ServicioForm;
 use App\Livewire\Blog\PostIndex;
 use App\Livewire\Blog\PostShow;
 use App\Livewire\Carrito;
+use App\Livewire\Demos\Restaurante\Carta;
 use App\Livewire\Servicio\ServicioShow;
 use App\Livewire\Servicio\ServiciosIndex;
 use App\Livewire\Solicitud\CreateSolicitud;
@@ -100,3 +101,39 @@ Route::get('/test-email', function () {
 // Checkout
 
 Route::get('/checkout', \App\Livewire\Checkout::class)->name('checkout')->middleware('auth');
+
+
+
+
+
+
+Route::prefix('demos/restaurante')->group(function () {
+
+    //Route::get('/', App\Livewire\Demos\Restaurante\Carta::class)->name('restaurante.carta');
+
+    Route::middleware(['auth', 'role:restaurante_admin'])->prefix('admin')->group(function () {
+       // Route::get('/', App\Livewire\Demos\Restaurante\Admin\Dashboard::class)->name('restaurante.admin');
+    });
+
+});
+
+Route::get('/carta', Carta::class)->name('carta.publica');
+Route::middleware(['auth', 'verified'])->prefix('admin')
+    ->prefix('demos/restaurante/admin')
+    ->group(function () {
+        Route::get('/', App\Livewire\Demos\Restaurante\Admin\Dashboard::class)->name('restaurante.admin');
+        Route::get('/nuevo', App\Livewire\Demos\Restaurante\Admin\PlatoForm::class)->name('restaurante.admin.nuevo');
+        Route::get('/editar/{id}', App\Livewire\Demos\Restaurante\Admin\PlatoForm::class)->name('restaurante.admin.editar');
+    });
+
+
+// routes/web.php
+use App\Livewire\Demos\Barberia\Reservar;
+use App\Livewire\Demos\Barberia\Admin\Panel;
+
+Route::prefix('barberia')->group(function() {
+    Route::get('/reservar', Reservar::class)->name('barberia.reservar');
+    Route::prefix('admin')->group(function() {
+        Route::get('/', Panel::class)->name('barberia.admin');
+    });
+});
