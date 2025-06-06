@@ -21,13 +21,13 @@ class CreateClientForUser
      */
     public function handle(UserCreated $event)
     {
-        // Solo crear cliente para usuarios normales
+        /*/Solo crear cliente para usuarios normales
         if ($event->user->hasRole('user')) {
             $event->user->client()->create([
                 'phone' => null,
                 'company_name' => null,
                 'tax_id' => null
             ]);
-        }
+        }*/
     }
 }

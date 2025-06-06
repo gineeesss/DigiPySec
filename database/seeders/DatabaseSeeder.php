@@ -37,6 +37,9 @@ class DatabaseSeeder extends Seeder
             HorarioDisponibleSeeder::class,
             CitaSeeder::class,
 
+            //seeder para tienda
+            TiendaSeeder::class,
+
         ]);
 
     }

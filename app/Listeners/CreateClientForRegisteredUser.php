@@ -22,12 +22,12 @@ class CreateClientForRegisteredUser
     public function handle(Registered $event)
     {
         // Solo si el usuario no es admin/tecnico (ajusta según tus roles)
-        if(!$event->user->hasRole(['admin', 'technician'])) {
+        /*if(!$event->user->hasRole(['admin', 'technician'])) {
             $event->user->client()->create([
                 'phone' => null,
                 'company_name' => null,
                 'tax_id' => null
             ]);
-        }
+        }*/
     }
 }

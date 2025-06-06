@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->unique()->onDelete('cascade'); // Añadido unique()            $table->string('phone')->nullable();
             $table->string('phone')->nullable();
             $table->string('company_name')->nullable(); // Nuevo campo útil
             $table->string('tax_id')->nullable(); // NIF/CIF para facturación

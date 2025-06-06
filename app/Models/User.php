@@ -49,6 +49,12 @@ class User extends Authenticatable
     public function client()
     {
         return $this->hasOne(Client::class);
+        /*
+        return $this->hasOne(Client::class)->withDefault(function ($client, $user) {
+            // Valores por defecto al acceder a la relación
+            $client->phone = $user->phone ?? null;
+            $client->company_name = $user->company_name ?? null;
+        });*/
     }
 
     public function addresses()

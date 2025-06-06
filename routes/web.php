@@ -71,6 +71,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
 });
 
 
+Route::get('/solicitudes/{solicitud}', SolicitudShow::class)->name('solicitud.show')->middleware('auth');
+
 // Chat (opcional)
 Route::get('/chat', \App\Livewire\Chat::class)->middleware('auth')->name('chat');
 
@@ -101,7 +103,6 @@ Route::get('/test-email', function () {
 // Checkout
 
 Route::get('/checkout', \App\Livewire\Checkout::class)->name('checkout')->middleware('auth');
-
 
 
 
@@ -148,4 +149,21 @@ Route::prefix('barberia/admin')->group(function() {
     Route::get('/peluqueros', Peluqueros::class)->name('barberia.admin.peluqueros');
     Route::get('/citas', Citas::class)->name('barberia.admin.citas');
     Route::get('/horarios', Horarios::class)->name('barberia.admin.horarios');
+});
+
+// routes/web.php
+Route::prefix('tienda')->group(function() {
+    Route::get('/', \App\Livewire\Demos\Tienda\ProductosTienda::class)->name('tienda.index');
+    Route::get('/categoria/{categoriaSlug}', \App\Livewire\Demos\Tienda\ProductosTienda::class)->name('tienda.categoria');
+});
+// routes/web.php (dentro del grupo 'tienda')
+// routes/web.php
+Route::get('/gracias/{codigo}', \App\Livewire\Demos\Tienda\GraciasTienda::class)->name('tienda.gracias');
+
+
+// routes/web.php
+Route::prefix('tienda')->group(function() {
+    Route::get('/', \App\Livewire\Demos\Tienda\ProductosTienda::class)->name('tienda.index');
+    Route::get('/carrito', \App\Livewire\Demos\Tienda\CarritoTienda::class)->name('tienda.carrito');
+    Route::get('/checkout', \App\Livewire\Demos\Tienda\CheckoutTienda::class)->name('tienda.checkout');
 });

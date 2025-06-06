@@ -1,54 +1,153 @@
-<div class="max-w-7xl mx-auto px-4 py-8">
-    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="p-6">
-            <h1 class="text-3xl font-bold text-gray-800 mb-6">Finalizar compra</h1>
+<!-- resources/views/livewire/checkout.blade.php -->
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">Finalizar Compra</h1>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="md:col-span-2">
-                    <h2 class="text-xl font-semibold mb-4">Resumen de tu pedido</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Sección de dirección de facturación -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Dirección de Facturación</h2>
 
-                    <ul class="divide-y divide-gray-200 mb-6">
-                        @foreach($carrito as $item)
-                            <li class="py-4 flex justify-between">
-                                <div>
-                                    <p class="font-medium">{{ $item['nombre'] }}</p>
-                                </div>
-                                <span>${{ number_format($item['precio'], 2) }}</span>
-                            </li>
+            @if($userAddresses->count() > 0)
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Seleccionar dirección guardada</label>
+                    <select wire:model="selectedBillingAddress" class="w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="">Seleccione una dirección</option>
+                        @foreach($userAddresses as $address)
+                            <option value="{{ $address->id }}">{{ $address->street }}, {{ $address->city }}</option>
                         @endforeach
-                    </ul>
+                    </select>
+                    <button wire:click="useDefaultBillingAddress" class="mt-2 text-sm text-blue-600 hover:text-blue-800">
+                        Usar mi dirección principal
+                    </button>
+                </div>
+            @endif
 
-                    <div class="border-t pt-4">
-                        <div class="flex justify-between text-lg font-bold">
-                            <span>Total:</span>
-                            <span>${{ number_format($this->calcularTotal(), 2) }}</span>
-                        </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre de contacto</label>
+                    <input type="text" wire:model="billingAddress.contact_name" class="w-full border-gray-300 rounded-md shadow-sm">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Calle</label>
+                    <input type="text" wire:model="billingAddress.street" class="w-full border-gray-300 rounded-md shadow-sm">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Ciudad</label>
+                        <input type="text" wire:model="billingAddress.city" class="w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Código Postal</label>
+                        <input type="text" wire:model="billingAddress.zip_code" class="w-full border-gray-300 rounded-md shadow-sm">
                     </div>
                 </div>
 
                 <div>
-                    <h2 class="text-xl font-semibold mb-4">Información adicional</h2>
-
-                    <form wire:submit.prevent="submit">
-                        <div class="mb-4">
-                            <label for="notas" class="block text-sm font-medium text-gray-700 mb-1">Notas (opcional)</label>
-                            <textarea
-                                wire:model="notas"
-                                id="notas"
-                                rows="4"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                            ></textarea>
-                        </div>
-
-                        <button
-                            type="submit"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
-                        >
-                            Confirmar solicitud
-                        </button>
-                    </form>
+                    <label class="block text-sm font-medium text-gray-700">Teléfono de contacto</label>
+                    <input type="text" wire:model="billingAddress.contact_phone" class="w-full border-gray-300 rounded-md shadow-sm">
                 </div>
             </div>
+        </div>
+
+        <!-- Sección de método de pago -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Método de Pago</h2>
+
+            @if($userPaymentMethods->count() > 0)
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Seleccionar método guardado</label>
+                    <select wire:model="selectedPaymentMethod" class="w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="">Seleccione un método</option>
+                        @foreach($userPaymentMethods as $method)
+                            <option value="{{ $method->id }}">
+                                {{ ucfirst($method->type) }}
+                                @if($method->type === 'credit_card') (****{{ $method->last_four }}) @endif
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Tipo de pago</label>
+                    <select wire:model="newPaymentMethod.type" class="w-full border-gray-300 rounded-md shadow-sm">
+                        <option value="">Seleccione un tipo</option>
+                        <option value="credit_card">Tarjeta de crédito</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="bank_transfer">Transferencia bancaria</option>
+                        <option value="cash">Efectivo</option>
+                    </select>
+                </div>
+
+                <!-- Campos condicionales según tipo de pago -->
+                @if($newPaymentMethod['type'] === 'credit_card')
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Titular de la tarjeta</label>
+                        <input type="text" wire:model="newPaymentMethod.card_holder" class="w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Número de tarjeta</label>
+                        <input type="text" wire:model="newPaymentMethod.card_number" class="w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Mes de expiración</label>
+                            <input type="text" wire:model="newPaymentMethod.expiry_month" class="w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Año de expiración</label>
+                            <input type="text" wire:model="newPaymentMethod.expiry_year" class="w-full border-gray-300 rounded-md shadow-sm">
+                        </div>
+                    </div>
+                @elseif($newPaymentMethod['type'] === 'bank_transfer')
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Nombre del banco</label>
+                        <input type="text" wire:model="newPaymentMethod.bank_name" class="w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Número de cuenta</label>
+                        <input type="text" wire:model="newPaymentMethod.account_number" class="w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumen del pedido -->
+    <div class="mt-8 bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Resumen de tu pedido</h2>
+
+        <div class="divide-y divide-gray-200">
+            @foreach($carrito as $item)
+                <div class="py-4 flex justify-between">
+                    <div>
+                        <p class="font-medium">{{ $item['nombre'] }}</p>
+                        <p class="text-sm text-gray-500">${{ number_format($item['precio'], 2) }}</p>
+                    </div>
+                    <p class="font-medium">${{ number_format($item['precio'], 2) }}</p>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-gray-200">
+            <div class="flex justify-between text-lg font-bold">
+                <span>Total:</span>
+                <span>${{ number_format($total, 2) }}</span>
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <button
+                wire:click="confirmarPedido"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-md font-medium"
+            >
+                Confirmar Pedido
+            </button>
         </div>
     </div>
 </div>
