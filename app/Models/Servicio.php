@@ -27,6 +27,11 @@ class Servicio extends Model
         return $this->belongsTo(CategoriaServicio::class, 'categoria_servicio_id');
     }
 
+    public function categoriaServicio()
+    {
+        return $this->belongsTo(CategoriaServicio::class, 'categoria_servicio_id');
+    }
+
     public function incluyes()
     {
         return $this->hasMany(ServicioIncluye::class, 'servicio_id');

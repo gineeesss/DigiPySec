@@ -40,6 +40,16 @@
                 </ul>
             </div>
 
+            @if($servicio->url)
+                <div class="mt-8">
+                    <button
+                        wire:click="verWeb"
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200"
+                    >
+                        Ver web
+                    </button>
+                </div>
+            @endif
             <!-- Cantidad y botón para agregar al carrito -->
             @auth
                 <div class="mt-8">
@@ -50,6 +60,7 @@
                         Añadir al carrito
                     </button>
                 </div>
+
             @else
                 <div class="mt-8 bg-blue-50 p-4 rounded-lg">
                     <p class="text-blue-800 mb-2">¿Quieres contratar este servicio?</p>

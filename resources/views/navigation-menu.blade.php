@@ -101,6 +101,14 @@
                         {{ __('Blog') }}
                     </x-nav-link>
 
+                    <x-nav-link href="{{ route('demos.index') }}" :active="request()->routeIs('demos.index')">
+                        {{ __('Portafolio') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('solicitud.index') }}" :active="request()->routeIs('solicitud.index')">
+                        {{ __('Mis solicitudes') }}
+                    </x-nav-link>
+
                     <x-nav-link href="{{ route('chat') }}" :active="request()->routeIs('chat')">
                         {{ __('Chat') }}
                     </x-nav-link>

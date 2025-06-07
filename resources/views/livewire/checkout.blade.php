@@ -73,47 +73,67 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Tipo de pago</label>
-                    <select wire:model="newPaymentMethod.type" class="w-full border-gray-300 rounded-md shadow-sm">
+                    <select wire:model="newPaymentMethod.type" id="payment-type" class="w-full border-gray-300 rounded-md shadow-sm">
                         <option value="">Seleccione un tipo</option>
                         <option value="credit_card">Tarjeta de crédito</option>
                         <option value="paypal">PayPal</option>
                         <option value="bank_transfer">Transferencia bancaria</option>
                         <option value="cash">Efectivo</option>
                     </select>
+
                 </div>
 
-                <!-- Campos condicionales según tipo de pago -->
-                @if($newPaymentMethod['type'] === 'credit_card')
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Titular de la tarjeta</label>
-                        <input type="text" wire:model="newPaymentMethod.card_holder" class="w-full border-gray-300 rounded-md shadow-sm">
-                    </div>
+                <!-- Campos para tarjeta de crédito -->
+                <div id="credit_card-fields" class="payment-fields hidden">
+                    <input type="text" wire:model="newPaymentMethod.card_number" placeholder="Número de tarjeta" class="w-full border-gray-300 rounded-md shadow-sm mt-2">
+                    <input type="text" wire:model="newPaymentMethod.expiration_date" placeholder="Fecha de expiración" class="w-full border-gray-300 rounded-md shadow-sm mt-2">
+                    <input type="text" wire:model="newPaymentMethod.cvv" placeholder="CVV" class="w-full border-gray-300 rounded-md shadow-sm mt-2">
+                </div>
 
+                <!-- Campos para PayPal -->
+                <div id="paypal-fields" class="payment-fields hidden">
+                    <input type="email" wire:model="newPaymentMethod.paypal_email" placeholder="Correo de PayPal" class="w-full border-gray-300 rounded-md shadow-sm mt-2">
+                </div>
+
+                <!-- Campos para transferencia -->
+                <div id="bank_transfer-fields" class="payment-fields hidden">
+                    <input type="text" wire:model="newPaymentMethod.iban" placeholder="IBAN" class="w-full border-gray-300 rounded-md shadow-sm mt-2">
+                </div>
+
+                <!-- Mensaje para efectivo -->
+                <div id="cash-fields" class="payment-fields hidden">
+                    <p class="text-gray-600 mt-2">El pago en efectivo se realizará en la entrega.</p>
+                </div>
+
+
+                {{-- Campos condicionales según el tipo de pago --}}
+                @if($newPaymentMethod['type'] === 'credit_card')
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Número de tarjeta</label>
                         <input type="text" wire:model="newPaymentMethod.card_number" class="w-full border-gray-300 rounded-md shadow-sm">
                     </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Mes de expiración</label>
-                            <input type="text" wire:model="newPaymentMethod.expiry_month" class="w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Año de expiración</label>
-                            <input type="text" wire:model="newPaymentMethod.expiry_year" class="w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Fecha de expiración</label>
+                        <input type="text" wire:model="newPaymentMethod.expiration_date" class="w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">CVV</label>
+                        <input type="text" wire:model="newPaymentMethod.cvv" class="w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+                @elseif($newPaymentMethod['type'] === 'paypal')
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Correo de PayPal</label>
+                        <input type="email" wire:model="newPaymentMethod.paypal_email" class="w-full border-gray-300 rounded-md shadow-sm">
                     </div>
                 @elseif($newPaymentMethod['type'] === 'bank_transfer')
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Nombre del banco</label>
-                        <input type="text" wire:model="newPaymentMethod.bank_name" class="w-full border-gray-300 rounded-md shadow-sm">
+                        <label class="block text-sm font-medium text-gray-700">IBAN</label>
+                        <input type="text" wire:model="newPaymentMethod.iban" class="w-full border-gray-300 rounded-md shadow-sm">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Número de cuenta</label>
-                        <input type="text" wire:model="newPaymentMethod.account_number" class="w-full border-gray-300 rounded-md shadow-sm">
-                    </div>
+                @elseif($newPaymentMethod['type'] === 'cash')
+                    <p class="text-gray-600">El pago en efectivo se realizará en la entrega.</p>
                 @endif
+
             </div>
         </div>
     </div>
@@ -151,3 +171,25 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const select = document.getElementById('payment-type');
+        const allFields = document.querySelectorAll('.payment-fields');
+
+        const toggleFields = (type) => {
+            allFields.forEach(div => div.classList.add('hidden'));
+            if (type) {
+                const selectedDiv = document.getElementById(`${type}-fields`);
+                if (selectedDiv) selectedDiv.classList.remove('hidden');
+            }
+        };
+
+        select.addEventListener('change', function () {
+            toggleFields(this.value);
+        });
+
+        // Si Livewire recarga la vista, vuelve a aplicar la lógica
+        toggleFields(select.value);
+    });
+</script>

@@ -6,7 +6,7 @@ use App\Models\SolicitudServicio;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class SolicitudList extends Component
+class SolicitudList_bk extends Component
 {
     use WithPagination;
 
@@ -15,7 +15,6 @@ class SolicitudList extends Component
     public $sortBy = 'created_at';
     public $sortDirection = 'desc';
     public $perPage = 10;
-    public $isAdminView = false;
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -24,12 +23,6 @@ class SolicitudList extends Component
         'sortDirection' => ['except' => 'desc'],
         'perPage' => ['except' => 10]
     ];
-
-    public function mount()
-    {
-        // Determinar si es vista de admin o cliente
-        $this->isAdminView = auth()->user()->can('manage-solicitudes');
-    }
 
     public function sortBy($field)
     {
@@ -43,10 +36,6 @@ class SolicitudList extends Component
 
     public function cambiarEstadoRapido($solicitudId, $nuevoEstado)
     {
-        if (!auth()->user()->can('manage-solicitudes')) {
-            abort(403);
-        }
-
         $solicitud = SolicitudServicio::findOrFail($solicitudId);
         $solicitud->update(['estado' => $nuevoEstado]);
 
@@ -55,17 +44,14 @@ class SolicitudList extends Component
 
     public function render()
     {
-        $query = SolicitudServicio::query()
+        $solicitudes = SolicitudServicio::query()
             ->with(['cliente', 'usuario'])
-            ->when(!$this->isAdminView, function($query) {
-                // Filtro para cliente: solo sus propias solicitudes
-                $query->where('cliente_id', auth()->user()->client->id);
-            })
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->whereHas('cliente.user', function ($q) {
+                    $q->whereHas('cliente', function ($q) {
                         $q->where('name', 'like', '%'.$this->search.'%')
-                            ->orWhere('email', 'like', '%'.$this->search.'%');
+                            ->orWhere('email', 'like', '%'.$this->search.'%')
+                            ->orWhere('telefono', 'like', '%'.$this->search.'%');
                     })
                         ->orWhere('id', 'like', '%'.$this->search.'%');
                 });
@@ -73,34 +59,19 @@ class SolicitudList extends Component
             ->when($this->estado, function ($query) {
                 $query->where('estado', $this->estado);
             })
-            ->orderBy($this->sortBy, $this->sortDirection);
-
-        $solicitudes = $query->paginate($this->perPage);
+            ->orderBy($this->sortBy, $this->sortDirection)
+            ->paginate($this->perPage);
 
         return view('livewire.solicitud.solicitud-list', [
             'solicitudes' => $solicitudes,
-            'estados' => $this->getEstadosDisponibles(),
-            'isAdminView' => $this->isAdminView
+            'estados' => [
+                '' => 'Todos',
+                'pendiente' => 'Pendiente',
+                'aprobada' => 'Aprobada',
+                'en_proceso' => 'En Proceso',
+                'completada' => 'Completada',
+                'cancelada' => 'Cancelada'
+            ]
         ])->layout('layouts.app');
-    }
-
-    protected function getEstadosDisponibles()
-    {
-        $baseEstados = [
-            'pendiente' => 'Pendiente',
-            'aprobada' => 'Aprobada',
-            'en_proceso' => 'En Proceso',
-            'completada' => 'Completada',
-            'cancelada' => 'Cancelada'
-        ];
-
-        if ($this->isAdminView) {
-            return ['' => 'Todos'] + $baseEstados;
-        }
-
-        // Para clientes, mostrar solo estados relevantes
-        return ['' => 'Todos'] + array_filter($baseEstados, function($key) {
-                return in_array($key, ['pendiente', 'aprobada', 'en_proceso', 'completada']);
-            }, ARRAY_FILTER_USE_KEY);
     }
 }

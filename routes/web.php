@@ -9,7 +9,12 @@ use App\Livewire\Admin\Servicio\ServicioForm;
 use App\Livewire\Blog\PostIndex;
 use App\Livewire\Blog\PostShow;
 use App\Livewire\Carrito;
+use App\Livewire\Demos\DemosIndex;
 use App\Livewire\Demos\Restaurante\Carta;
+use App\Livewire\Demos\Tienda\CarritoTienda;
+use App\Livewire\Demos\Tienda\CheckoutTienda;
+use App\Livewire\Demos\Tienda\GraciasTienda;
+use App\Livewire\Demos\Tienda\ProductosTienda;
 use App\Livewire\Servicio\ServicioShow;
 use App\Livewire\Servicio\ServiciosIndex;
 use App\Livewire\Solicitud\CreateSolicitud;
@@ -72,6 +77,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
 
 
 Route::get('/solicitudes/{solicitud}', SolicitudShow::class)->name('solicitud.show')->middleware('auth');
+Route::get('/solicitudes', SolicitudList::class)->name('solicitud.index')->middleware('auth');
 
 // Chat (opcional)
 Route::get('/chat', \App\Livewire\Chat::class)->middleware('auth')->name('chat');
@@ -167,3 +173,41 @@ Route::prefix('tienda')->group(function() {
     Route::get('/carrito', \App\Livewire\Demos\Tienda\CarritoTienda::class)->name('tienda.carrito');
     Route::get('/checkout', \App\Livewire\Demos\Tienda\CheckoutTienda::class)->name('tienda.checkout');
 });
+
+
+Route::prefix('demos')->group(function () {
+    Route::get('/carta', Carta::class)->name('restaurante.carta.publica');
+
+    Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+        Route::get('/', \App\Livewire\Demos\Restaurante\Admin\Dashboard::class)->name('restaurante.admin');
+        Route::get('/nuevo', \App\Livewire\Demos\Restaurante\Admin\PlatoForm::class)->name('restaurante.admin.nuevo');
+        Route::get('/editar/{id}', \App\Livewire\Demos\Restaurante\Admin\PlatoForm::class)->name('restaurante.admin.editar');
+    });
+});
+
+
+Route::prefix('demos/barberia')->group(function () {
+    Route::get('/reservar', Reservar::class)->name('barberia.reservar');
+
+    Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+        Route::get('/', Panel::class)->name('barberia.admin');
+        Route::get('/peluqueros', Peluqueros::class)->name('barberia.admin.peluqueros');
+        Route::get('/citas', Citas::class)->name('barberia.admin.citas');
+        Route::get('/horarios', Horarios::class)->name('barberia.admin.horarios');
+    });
+});
+
+Route::prefix('demos/tienda')->group(function () {
+    Route::get('/', ProductosTienda::class)->name('tienda.index');
+    Route::get('/categoria/{categoriaSlug}', ProductosTienda::class)->name('tienda.categoria');
+    Route::get('/carrito', CarritoTienda::class)->name('tienda.carrito');
+    Route::get('/checkout', CheckoutTienda::class)->name('tienda.checkout');
+    Route::get('/gracias/{codigo}', GraciasTienda::class)->name('tienda.gracias');
+});
+
+
+
+
+
+
+Route::get('/demos', DemosIndex::class)->name('demos.index');

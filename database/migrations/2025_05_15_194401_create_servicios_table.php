@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('categoria_servicio_id')->constrained()->onDelete('cascade');
             $table->string('nombre');
             $table->string('slug')->unique();
+            $table->string('url')->nullable();
             $table->text('descripcion_corta');
             $table->text('descripcion_larga');
             $table->decimal('precio_base', 10, 2);

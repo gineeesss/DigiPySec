@@ -31,7 +31,13 @@ class CategoriaServicioSeeder extends Seeder
                 'slug' => 'optimizacion',
                 'descripcion' => 'Mejora el rendimiento de tu sitio web',
                 'icono' => 'lightning-bolt'
-            ]
+            ],
+            [
+                'nombre' => 'Demos',
+                'slug' => 'demos',
+                'descripcion' => 'Sitios web de muestra representativos de nuestros servicios',
+                'icono' => 'monitor'
+            ],
         ];
 
         foreach ($categorias as $categoria) {

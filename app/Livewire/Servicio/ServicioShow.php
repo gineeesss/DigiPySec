@@ -56,6 +56,15 @@ class ServicioShow extends Component
         $this->dispatch('notify', 'Servicio agregado al carrito');
     }
 
+    public function verWeb()
+    {
+        if ($this->servicio->url) {
+            return redirect()->away($this->servicio->url);
+        }
+
+        session()->flash('error', 'Este servicio no tiene una URL de demostración configurada.');
+    }
+
     public function render()
     {
         return view('livewire.servicio.show')->layout('layouts.app');

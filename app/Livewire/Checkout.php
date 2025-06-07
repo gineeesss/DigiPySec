@@ -13,6 +13,7 @@ class Checkout extends Component
 {
     public $carrito = [];
     public $total = 0;
+    public $paymentType = '';
 
     // Dirección de facturación
     public $userAddresses = [];
@@ -46,6 +47,8 @@ class Checkout extends Component
     {
         $this->carrito = session()->get('carrito', []);
         $this->calcularTotal();
+        $this->paymentType = $this->newPaymentMethod['type'] ?? '';
+
 
         // Cargar direcciones y métodos de pago del usuario
         if (Auth::check()) {
@@ -100,6 +103,14 @@ class Checkout extends Component
             }
         }
     }
+    public function updated($propertyName)
+    {
+        if ($propertyName === 'newPaymentMethod.type') {
+            $this->paymentType = $this->newPaymentMethod['type'];
+        }
+    }
+
+
 
     public function confirmarPedido()
     {
