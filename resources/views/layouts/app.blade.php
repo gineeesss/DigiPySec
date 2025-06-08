@@ -10,6 +10,9 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -34,33 +37,10 @@
 
             <!-- Page Content -->
 
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex gap-6">
-                    <!-- Columna principal: contenido dinámico -->
-                    <div class="flex-1">
-                        {{ $slot }}
-                    </div>
-
-                    <!-- Columna lateral derecha: Chatbot -->
-                    <div class="w-80 relative mt-2">
-                        <div x-data="{ open: false }" class="sticky top-6" x-cloak>
-                            <!-- Botón flotante -->
-                            <button @click="open = !open" class="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg focus:outline-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M9 17v-2a4 4 0 014-4h1a4 4 0 014 4v2m-4 4h.01M12 11c1.104 0 2-.896 2-2s-.896-2-2-2-2 .896-2 2 .896 2 2 2z" />
-                                </svg>
-                            </button>
-
-                            <!-- Chatbot -->
-                            <div x-show="open" x-transition class="mt-2 bg-white rounded-lg shadow-lg">
-                                <livewire:chatbot />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <main class="min-h-screen">
+                {{ $slot }}
+            </main>
         </div>
 
         <!-- Footer -->
@@ -105,10 +85,10 @@
                     <div class="w-full md:w-1/4 px-4">
                         <h3 class="text-lg font-semibold mb-4">Contacto</h3>
                         <address class="not-italic mb-4">
-                            <p class="flex items-start"><i class="fas fa-map-marker-alt mr-2 mt-1"></i> Calle Ejemplo, 123</p>
-                            <p class="flex items-start my-2"><i class="fas fa-city mr-2 mt-1"></i> 28001 Madrid, España</p>
-                            <p class="flex items-start"><i class="fas fa-phone mr-2 mt-1"></i> +34 123 456 789</p>
-                            <p class="flex items-start my-2"><i class="fas fa-envelope mr-2 mt-1"></i> info@empresa.com</p>
+                            <p class="flex items-start"><i class="fas fa-map-marker-alt mr-2 mt-1"></i> Calle Inventada, 69</p>
+                            <p class="flex items-start my-2"><i class="fas fa-city mr-2 mt-1"></i> 06003 Badajoz, España</p>
+                            <p class="flex items-start"><i class="fas fa-phone mr-2 mt-1"></i> +34 696 696 696</p>
+                            <p class="flex items-start my-2"><i class="fas fa-envelope mr-2 mt-1"></i> info@digipysec.com</p>
                         </address>
 
                         <h3 class="text-lg font-semibold mb-2 mt-6">Empresa</h3>
@@ -124,7 +104,7 @@
                 <div class="border-t border-gray-700 mt-8 pt-6">
                     <div class="flex flex-col md:flex-row justify-between items-center">
                         <div class="mb-4 md:mb-0">
-                            &copy; {{ date('Y') == '2023' ? '2023' : '2023-' . date('Y') }} Empresa SL<sup>®</sup> - Todos los derechos reservados
+                            &copy; {{ date('Y') == '2023' ? '2023' : '2023-' . date('Y') }} DigiPySec SL<sup>®</sup> - Todos los derechos reservados
                         </div>
                         <div class="flex flex-wrap justify-center space-x-4">
                             <a href="{{ route('servicios.index') }}" class="hover:text-blue-300 transition">Aviso Legal</a>
@@ -138,6 +118,30 @@
 
 
         @stack('modals')
+        <div x-data="{ open: false }"
+             x-cloak
+             class="position-fixed bottom-0 end-0 p-4 z-50 d-flex flex-column align-items-end"
+             style="pointer-events: none;">   {{-- evita tapar enlaces debajo --}}
+
+            {{-- Botón redondo --}}
+            <button @click="open = !open"
+                    class="btn btn-primary rounded-circle shadow-lg d-flex align-items-center justify-content-center"
+                    style="width:56px;height:56px;pointer-events:auto;"
+                    aria-label="Abrir chat">
+                <i class="bi bi-chat-dots-fill fs-4"></i>
+            </button>
+
+            {{-- Panel del chat --}}
+            <div x-show="open"
+                 x-transition.scale.origin.bottom.right
+                 @click.outside="open = false"
+                 class="card shadow-lg mt-3"
+                 style="width:320px;max-height:80vh;pointer-events:auto;">
+                <div class="card-body p-0">
+                    <livewire:chatbot />
+                </div>
+            </div>
+        </div>
         @livewireScripts
 
     </body>

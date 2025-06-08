@@ -44,8 +44,10 @@
                 @foreach ($categoria->platos as $plato)
                     <tr class="border-t">
                         <td class="p-2">
-                            <img src="{{ $plato->imagen_url }}" alt="Imagen {{ $plato->nombre }}" class="w-24 h-24 object-cover rounded">
-                        </td>
+                            <img x-bind:src="obtenerImagen('{{ $plato->nombre }}')"
+                                 alt="Imagen {{ $plato->nombre }}"
+                                 class="w-24 h-24 object-cover rounded"
+                                 @click="buscarImagen('{{ $plato->nombre }}')">                        </td>
                         <td class="p-2 font-bold">{{ $plato->nombre }}</td>
                         <td class="p-2 text-sm">{{ $plato->descripcion }}</td>
                         <td class="p-2">
@@ -99,6 +101,56 @@
         return {
             personas: 1,
             items: [],
+            imagenesCache: {},
+            apiKey: 'tHTkM4F1A7doxVR0dhkYE5fi7myKA4uej5jysw2XKGw9olDMdiafhmLQ', // Reemplaza con tu API key
+
+            async obtenerImagen(query) {
+                // Si ya tenemos la imagen en caché, la devolvemos
+                if(this.imagenesCache[query]) {
+                    return this.imagenesCache[query];
+                }
+
+                // Si no, intentamos obtenerla de Pexels
+                try {
+                    const response = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1`, {
+                        headers: {
+                            'Authorization': this.apiKey
+                        }
+                    });
+
+                    const data = await response.json();
+                    if(data.photos && data.photos.length > 0) {
+                        this.imagenesCache[query] = data.photos[0].src.small;
+                        return data.photos[0].src.small;
+                    }
+                } catch (error) {
+                    console.error('Error al obtener imagen:', error);
+                }
+
+                // Si no encontramos imagen, devolvemos una por defecto
+                return '{{ $plato->imagen_url }}';
+            },
+
+            async buscarImagen(query) {
+                try {
+                    const response = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=10`, {
+                        headers: {
+                            'Authorization': this.apiKey
+                        }
+                    });
+
+                    const data = await response.json();
+                    if(data.photos && data.photos.length > 0) {
+                        // Aquí podrías mostrar un modal con las imágenes para seleccionar
+                        console.log('Imágenes encontradas:', data.photos);
+                        // Por ahora, usamos la primera
+                        this.imagenesCache[query] = data.photos[0].src.medium;
+                    }
+                } catch (error) {
+                    console.error('Error al buscar imágenes:', error);
+                }
+            },
+
             agregar(nombre, precio) {
                 this.items.push({ nombre, precio });
             },

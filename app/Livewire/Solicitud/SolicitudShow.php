@@ -33,16 +33,13 @@ class SolicitudShow extends Component
             'nuevoEstado' => 'required|in:' . implode(',', array_keys($this->estadosDisponibles)),
             'comentario' => 'nullable|string|max:500'
         ]);
-
         DB::transaction(function () {
             $this->solicitud->update(['estado' => $this->nuevoEstado]);
-
             if ($this->comentario) {
                 $this->solicitud->notas .= "\n\n[" . now()->format('d/m/Y H:i') . "] " . $this->comentario;
                 $this->solicitud->save();
                 event(new SolicitudEstadoActualizado($this->solicitud, $this->comentario));
             }
-
             session()->flash('message', 'Estado actualizado correctamente');
             $this->dispatch('estadoActualizado');
         });

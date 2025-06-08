@@ -11,16 +11,16 @@
                     <div class="space-y-6">
                         <!-- Campo Nombre -->
                         <div>
-                            <x-label for="name" value="Nombre completo" />
-                            <x-input wire:model="name" id="name" type="text" class="mt-1 block w-full" />
-                            <x-input-error for="name" class="mt-2" />
+                            <x-label for="user.name" value="Nombre completo" />
+                            <x-input wire:model="user.name" id="name" type="text" value="{{ $user->name }}" class="mt-1 block w-full" />
+                            <x-input-error for="user.name" class="mt-2" />
                         </div>
 
                         <!-- Campo Email -->
                         <div>
-                            <x-label for="email" value="Email" />
-                            <x-input wire:model="email" id="email" type="email" class="mt-1 block w-full" />
-                            <x-input-error for="email" class="mt-2" />
+                            <x-label for="user.email" value="Email" />
+                            <x-input wire:model="user.email" id="email" type="email" value="{{ $user->email }}" class="mt-1 block w-full" />
+                            <x-input-error for="user.email" class="mt-2" />
                         </div>
 
                         <!-- Campo Teléfono -->

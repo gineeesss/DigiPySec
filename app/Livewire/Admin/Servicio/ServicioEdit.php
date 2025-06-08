@@ -14,6 +14,7 @@ class ServicioEdit extends Component
 {
     use WithFileUploads;
 
+    public Servicio $servicio;
     public $servicioId;
     public $categoria_servicio_id;
     public $nombre;
@@ -45,10 +46,10 @@ class ServicioEdit extends Component
         'imagenes.*' => 'nullable|image|max:2048',
     ];
 
-    public function mount($id)
+    public function mount(Servicio $servicio)
     {
-        $servicio = Servicio::with(['incluyes', 'imagenes'])->findOrFail($id);
 
+        $this->servicio = $servicio;
         $this->servicioId = $servicio->id;
         $this->categoria_servicio_id = $servicio->categoria_servicio_id;
         $this->nombre = $servicio->nombre;
@@ -182,7 +183,7 @@ class ServicioEdit extends Component
 
     public function render()
     {
-        return view('livewire.admin.servicio.edit', [
+        return view('livewire.admin.servicios.edit', [
             'categorias' => CategoriaServicio::all(),
             'imagenesSubidas' => $this->imagenesSubidas
         ])->layout('layouts.app');

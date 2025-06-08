@@ -5,6 +5,7 @@ use App\Livewire\Admin\Clients\Edit;
 use App\Livewire\Admin\Clients\Index;
 use App\Livewire\Admin\Posts\AdminPostIndex;
 use App\Livewire\Admin\Posts\PostForm;
+use App\Livewire\Admin\Servicio\ServicioEdit;
 use App\Livewire\Admin\Servicio\ServicioForm;
 use App\Livewire\Blog\PostIndex;
 use App\Livewire\Blog\PostShow;
@@ -21,14 +22,21 @@ use App\Livewire\Solicitud\CreateSolicitud;
 use App\Livewire\Solicitud\SolicitudEdit;
 use App\Livewire\Solicitud\SolicitudList;
 use App\Livewire\Solicitud\SolicitudShow;
+use App\Livewire\Welcome;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Laravel\WithPagination;
 
 
-Route::get('/', function () {
+Route::get('/s', function () {
     return view('welcome');
 });
+
+
+Route::get('/', Welcome::class)->name('welcome');
+
+Route::get('/servicios', ServiciosIndex::class)->name('servicios.index');
+
 
 Route::middleware([
     'auth:sanctum',
@@ -41,7 +49,6 @@ Route::middleware([
 });
 
 // Rutas públicas del catálogo
-Route::get('/servicios', ServiciosIndex::class)->name('servicios.index');
 Route::get('/servicios/{servicio:slug}', ServicioShow::class)->name('servicios.show');
 
 // Rutas públicas del blog
@@ -59,7 +66,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     // Gestión de servicios
     Route::get('/servicios', ServiciosIndex::class)->name('admin.servicios.index');
     Route::get('/servicios/crear', ServicioForm::class)->name('admin.servicios.create');
-    Route::get('/servicios/{servicio}/editar', ServicioForm::class)->name('admin.servicios.edit');
+    Route::get('/servicios/{servicio}/editar', ServicioEdit::class)->name('admin.servicios.edit');
     Route::get('/servicios/{servicio}', ServicioShow::class)->name('admin.servicios.show');
 
     // Gestión de solicitudes
@@ -100,26 +107,13 @@ Route::get('/test-email', function () {
 });
 
 
-
-
-// routes/web.php
-
-// Carrito
-
-// Checkout
-
 Route::get('/checkout', \App\Livewire\Checkout::class)->name('checkout')->middleware('auth');
-
-
 
 
 
 Route::prefix('demos/restaurante')->group(function () {
 
-    //Route::get('/', App\Livewire\Demos\Restaurante\Carta::class)->name('restaurante.carta');
-
     Route::middleware(['auth', 'role:restaurante_admin'])->prefix('admin')->group(function () {
-       // Route::get('/', App\Livewire\Demos\Restaurante\Admin\Dashboard::class)->name('restaurante.admin');
     });
 
 });
@@ -134,7 +128,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')
     });
 
 
-// routes/web.php
 use App\Livewire\Demos\Barberia\Reservar;
 use App\Livewire\Demos\Barberia\Admin\Panel;
 
@@ -145,7 +138,6 @@ Route::prefix('barberia')->group(function() {
     });
 });
 
-// routes/web.php
 use App\Livewire\Demos\Barberia\Admin\Peluqueros;
 use App\Livewire\Demos\Barberia\Admin\Citas;
 use App\Livewire\Demos\Barberia\Admin\Horarios;
@@ -157,23 +149,18 @@ Route::prefix('barberia/admin')->group(function() {
     Route::get('/horarios', Horarios::class)->name('barberia.admin.horarios');
 });
 
-// routes/web.php
 Route::prefix('tienda')->group(function() {
     Route::get('/', \App\Livewire\Demos\Tienda\ProductosTienda::class)->name('tienda.index');
     Route::get('/categoria/{categoriaSlug}', \App\Livewire\Demos\Tienda\ProductosTienda::class)->name('tienda.categoria');
 });
-// routes/web.php (dentro del grupo 'tienda')
-// routes/web.php
+
 Route::get('/gracias/{codigo}', \App\Livewire\Demos\Tienda\GraciasTienda::class)->name('tienda.gracias');
 
-
-// routes/web.php
 Route::prefix('tienda')->group(function() {
     Route::get('/', \App\Livewire\Demos\Tienda\ProductosTienda::class)->name('tienda.index');
     Route::get('/carrito', \App\Livewire\Demos\Tienda\CarritoTienda::class)->name('tienda.carrito');
     Route::get('/checkout', \App\Livewire\Demos\Tienda\CheckoutTienda::class)->name('tienda.checkout');
 });
-
 
 Route::prefix('demos')->group(function () {
     Route::get('/carta', Carta::class)->name('restaurante.carta.publica');
@@ -184,7 +171,6 @@ Route::prefix('demos')->group(function () {
         Route::get('/editar/{id}', \App\Livewire\Demos\Restaurante\Admin\PlatoForm::class)->name('restaurante.admin.editar');
     });
 });
-
 
 Route::prefix('demos/barberia')->group(function () {
     Route::get('/reservar', Reservar::class)->name('barberia.reservar');
@@ -204,10 +190,6 @@ Route::prefix('demos/tienda')->group(function () {
     Route::get('/checkout', CheckoutTienda::class)->name('tienda.checkout');
     Route::get('/gracias/{codigo}', GraciasTienda::class)->name('tienda.gracias');
 });
-
-
-
-
 
 
 Route::get('/demos', DemosIndex::class)->name('demos.index');

@@ -49,13 +49,10 @@ class Checkout extends Component
         $this->calcularTotal();
         $this->paymentType = $this->newPaymentMethod['type'] ?? '';
 
-
-        // Cargar direcciones y métodos de pago del usuario
         if (Auth::check()) {
             $this->userAddresses = Auth::user()->addresses()->where('type', 'billing')->orWhere('type', 'both')->get();
             $this->userPaymentMethods = Auth::user()->paymentMethods()->get();
 
-            // Cargar dirección por defecto si existe
             $defaultAddress = Auth::user()->addresses()->where('is_default', true)->first();
             if ($defaultAddress) {
                 $this->selectedBillingAddress = $defaultAddress->id;

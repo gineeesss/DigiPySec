@@ -2,38 +2,39 @@
 
 namespace App\Livewire\Admin\Clients;
 
+use App\Models\User;
 use Livewire\Component;
 use App\Models\Client;
 
 class Edit extends Component
 {
     public Client $client;
-    public $name;
-    public $email;
+    public User $user;
     public $phone;
 
     protected $rules = [
-        'name' => 'required|min:3',
-        'email' => 'required|email|unique:clients,email,{client->id}',
+        'user.name' => 'required|min:3',
+        'user.email' => 'required|email|unique:users,email,{user->id}',
         'phone' => 'nullable|string'
     ];
 
     public function mount(Client $client)
     {
         $this->client = $client;
-        $this->fill($client->only('name', 'email', 'phone'));
+        $this->user = $client->user ?? new User(); // Si no tiene usuario, crea uno vacío
+        $this->phone = $client->phone;
     }
 
     public function update()
     {
         $this->validate();
 
+        $this->user->save();
+
         $this->client->update([
-            'name' => $this->name,
-            'email' => $this->email,
             'phone' => $this->phone
         ]);
-
+        $this->emit('refreshComponent');
         return redirect()->route('admin.clients.index')
             ->with('success', 'Cliente actualizado correctamente');
     }

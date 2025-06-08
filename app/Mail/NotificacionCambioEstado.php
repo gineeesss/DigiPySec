@@ -13,10 +13,6 @@ use Illuminate\Queue\SerializesModels;
 class NotificacionCambioEstado extends Mailable
 {
     use Queueable, SerializesModels;
-
-    /**
-     * Create a new message instance.
-     */
     public $solicitud;
     public $comentario;
     public function __construct(SolicitudServicio $solicitud, ?string $comentario = null)
@@ -24,7 +20,6 @@ class NotificacionCambioEstado extends Mailable
         $this->solicitud = $solicitud;
         $this->comentario = $comentario;
     }
-
     public function build()
     {
         return $this->subject('Cambio de estado de tu solicitud')
